@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <!-- Development profile: human-readable console output -->
+    <springProfile name="dev">
+        <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+            <encoder>
+                <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+            </encoder>
+        </appender>
+        <root level="DEBUG">
+            <appender-ref ref="CONSOLE"/>
+        </root>
+    </springProfile>
+
+    <!-- Staging and production profiles: structured JSON logging -->
+    <springProfile name="staging,prod">
+        <appender name="JSON_CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+            <encoder class="net.logstash.logback.encoder.LogstashEncoder"/>
+        </appender>
+        <root level="INFO">
+            <appender-ref ref="JSON_CONSOLE"/>
+        </root>
+    </springProfile>
+
+    <!-- Fallback for all other profiles (not dev, staging, or prod) -->
+    <springProfile name="!dev,!staging,!prod">
+        <appender name="CONSOLE_FALLBACK" class="ch.qos.logback.core.ConsoleAppender">
+            <encoder>
+                <pattern>%d{ISO8601} [%thread] %-5level %logger{36} - %msg%n</pattern>
+            </encoder>
+        </appender>
+        <root level="INFO">
+            <appender-ref ref="CONSOLE_FALLBACK"/>
+        </root>
+    </springProfile>
+
+</configuration>
